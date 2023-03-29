@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './style.css'
 import Header from './components/Header'
@@ -6,8 +6,15 @@ import InputFields from './components/InputField';
 import Note from './components/Note';
 import Footer from './components/Footer';
 
+
+// Get Local Storage 
+const getLocalStorageData=()=>{
+  let noteData=localStorage.getItem('Notes')
+  return noteData? JSON.parse(localStorage.getItem('Notes')):[];
+}
+
 function App() {
-  const [notes, setNotes] = useState([])
+  const [notes, setNotes] = useState(getLocalStorageData())
 
   function addToDo(newItem) {
     setNotes(preValue => {
@@ -20,6 +27,9 @@ function App() {
       return preValue.filter((item,index)=>index!==id)
     })
   }
+  useEffect(()=>{
+    localStorage.setItem('Notes',JSON.stringify(notes))
+  },[notes])
 
   return (
     <div className="App">
